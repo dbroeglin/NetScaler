@@ -17,9 +17,9 @@ function _InvokeNSRestApiGet {
         
     .PARAMETER Filters
         A Hashtable of search filter values.
-        
-    .EXAMPLE
-        TODO
+
+    .PARAMETER Arguments
+        A Hashtable of arguments values.
         
     .OUTPUTS        
         PSCustomObject that represents the JSON response content. This object can be manipulated using the ConvertTo-Json Cmdlet.
@@ -34,7 +34,9 @@ function _InvokeNSRestApiGet {
 
         [string]$Type,
         
-        [Hashtable]$Filters = @{}
+        [Hashtable]$Filters = @{},
+        
+        [Hashtable]$Arguments = @{}
     )
 
     if ($Name.Count -gt 0) {
@@ -46,7 +48,7 @@ function _InvokeNSRestApiGet {
             }
         }
     } else {
-        $response = _InvokeNSRestApi -Session $Session -Method Get -Type $Type -Action Get -Filters $Filters
+        $response = _InvokeNSRestApi -Session $Session -Method Get -Type $Type -Action Get -Filters $Filters -Arguments $Arguments
         if ($response.errorcode -ne 0) { throw $response }
         if ($Response.psobject.properties.name -contains $Type) {
             $response.$Type

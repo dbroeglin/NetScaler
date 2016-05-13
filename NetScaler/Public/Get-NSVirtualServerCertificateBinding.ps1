@@ -14,54 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-NSSystemFile {
+function Get-NSVirtualServerCertificateBinding {
     <#
     .SYNOPSIS
-        Gets the specified system file object(s).
+        Gets the specified virtual server certificate-key pair binding object(s).
 
     .DESCRIPTION
-        Gets the specified system file object(s).
+        Gets the specified virtual server certificate-key pair binding object(s).
         Either returns a single object identified by its name (-Name parameter)
         or a collection of objects filtered by the other parameters. Those
         filter parameters accept either a literal value or a regexp in the form
         "/someregexp/".
 
     .EXAMPLE
-        Get-NSSystemFile
+        Get-NSVirtualServerCertificateBinding
 
-        Get all system file objects.
+        Get all virtual server certificate-key pair binding objects.
 
     .EXAMPLE
-        Get-NSSystemFile -Name 'foobar'
+        Get-NSVirtualServerCertificateBinding -Name 'foobar'
     
-        Get the system file named 'foobar'.
+        Get the virtual server certificate-key pair binding named 'foobar'.
 
     .PARAMETER Session
         The NetScaler session object.
 
     .PARAMETER Name
-        The name or names of the system files to get.
-
-    .PARAMETER Filename
-        A filter to apply to the file name value.
-
-    .PARAMETER FileLocation
-        A filter to apply to the file location value.
+        The name or names of the virtual server certificate-key pair bindings to get.
     #>
     [CmdletBinding(DefaultParameterSetName='get')]
     param(
         $Session = $Script:Session,
 
-        [Parameter(Position=0, ParameterSetName='get')]
-        [string[]]$Name = @(),
-
-        [Parameter(ParameterSetName='search')]
-
-        [string]$Filename,
-
-        [Parameter(ParameterSetName='search')]
-
-        [string]$FileLocation
+        [Parameter(Mandatory = $true, Position=0, ParameterSetName='get')]
+        [string[]]$Name = @()
     )
 
     begin {
@@ -69,14 +55,6 @@ function Get-NSSystemFile {
     }
 
     process {
-        # Contruct a filter hash if we specified any filters
-        $Filters = @{}
-        if ($PSBoundParameters.ContainsKey('Filename')) {
-            $Filters['filename'] = $Filename
-        }
-        if ($PSBoundParameters.ContainsKey('FileLocation')) {
-            $Filters['filelocation'] = $FileLocation
-        }
-        _InvokeNSRestApiGet -Session $Session -Type systemfile -Name $Name -Arguments $Filters
+        _InvokeNSRestApiGet -Session $Session -Type sslvserver_sslcertkey_binding -Name $Name
     }
 }
