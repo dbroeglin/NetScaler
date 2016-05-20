@@ -55,15 +55,15 @@ function Add-NSDnsNameServer {
         Default value: UDP
         Possible values = UDP, TCP, UDP_TCP
     #>
-    [cmdletbinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
-    param(
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Low', DefaultParameterSetName='IPAddress')]
+    Param(
         $Session = $script:session,
 
-        [parameter(Mandatory)]
-        [ValidateScript({$_ -match [IPAddress]$_ })]
-        [string[]]$IPAddress = (Read-Host -Prompt 'DNS server IP'),
+        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName='IPAddress')]
+        [string[]]$IPAddress,
 
-        [string]$DNSVServerName = [string]::Empty,
+        [Parameter(Mandatory, ParameterSetName='DNSVirtualServer')]
+        [string]$DNSVServerName,
 
         [switch]$Local = $false,
 
@@ -79,16 +79,20 @@ function Add-NSDnsNameServer {
     }
 
     process {
-        foreach ($item in $IPAddress) {
+        foreach ($item in $(if ($IPAddress) { $IPAddress } else { $DNSVServerName })) {
             if ($PSCmdlet.ShouldProcess($item, 'Add DNS server IP')) {
                 try {
-                    $params = @{
-                        ip = $IPAddress
-                        dnsvservername = $DNSVServerName
-                        local = $Local
+                    $Params = @{
                         state = $State
                         type = $Type
                     }
+                    if ($PSBoundParameters.ContainsKey('IPAddress')) {
+                        $Params.ip = $item
+                        $Params.local = $(if($Local) { "true" } else { "false" })
+                    } 
+                    if ($PSBoundParameters.ContainsKey('DNSVServerName')) {
+                        $Params.dnsvservername = $item
+                    } 
                     $response = _InvokeNSRestApi -Session $Session -Method POST -Type dnsnameserver -Payload $params -Action add
                 } catch {
                     throw $_
