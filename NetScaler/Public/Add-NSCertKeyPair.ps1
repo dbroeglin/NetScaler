@@ -89,8 +89,10 @@ function Add-NSCertKeyPair {
                 $params = @{
                     certkey = $CertKeyName
                     cert = $CertPath
-                    key = $KeyPath
                     inform = $CertKeyFormat
+                }
+                if ($PSBoundParameters.ContainsKey('KeyPath')) {
+                    $params.key = $KeyPath
                 }
                 if ($CertKeyFormat -eq 'PEM' -and $Password) {
                     $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
