@@ -9,10 +9,10 @@
 @(
     @("CSAction",                              "csaction",                          "content switching action",
         [ordered]@{
+            "UndefinedHits"   = @("undefhits", "undefined hits")
             "ActionName"      = @("name", "action name") 
             "TargetLBVserver" = @("targetlbvserver", "target load balancer virtual server") 
             "Hits"            = @("hits", "hits")
-            "UndefinedHits"   = @("undefhits", "undefined hits")
             "ReferenceCount"  = @("referencecount", "reference count")
             "Comment"         = @("comment", "comment")
         }
