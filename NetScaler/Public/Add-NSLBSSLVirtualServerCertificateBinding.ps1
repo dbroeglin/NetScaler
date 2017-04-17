@@ -36,6 +36,11 @@ function Add-NSLBSSLVirtualServerCertificateBinding {
     .PARAMETER Certificate
         The name of the certificate key pair binding.
 
+    .PARAMETER SniCert
+        If true, this binding is used with SNI.
+
+        Default: $False
+
     .PARAMETER Passthru
         Return the load balancer server object.
 
@@ -51,6 +56,8 @@ function Add-NSLBSSLVirtualServerCertificateBinding {
 
         [parameter(Mandatory=$True)]
         [string]$Certificate,
+
+        [Boolean]$SniCert = $False,
 
         [Switch]$PassThru,
 
@@ -68,6 +75,7 @@ function Add-NSLBSSLVirtualServerCertificateBinding {
                 $params = @{
                     vservername = $VirtualServerName
                     certkeyname = $Certificate
+                    snicert     = $SniCert
                 }
 
                 _InvokeNSRestApi -Session $Session -Method PUT -Type sslvserver_sslcertkey_binding -Payload $params
