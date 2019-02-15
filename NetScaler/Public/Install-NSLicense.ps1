@@ -63,9 +63,13 @@ function Install-NSLicense {
             if (-not $fileName.EndsWith(".lic", [StringComparison]::OrdinalIgnoreCase)) {
                 throw "'$fileName' file name is invalid. Valid Citrix license file names end in .lic."
             }
-
+            $contentParams = if ($PSVersionTable.PSVersion.Major -ge 6) {
+                @{ AsByteStream = $True }
+            } else {
+                @{ Encoding = "Byte" }
+            }
             if ($PSCmdlet.ShouldProcess($fileName, 'Install license file')) {
-                $licContent = Get-Content -Path $Path -Encoding "Byte"
+                $licContent = Get-Content -Path $Path @contentParams
                 $licContentBase64 = [System.Convert]::ToBase64String($licContent)
                 $params = @{
                     filename = $fileName
