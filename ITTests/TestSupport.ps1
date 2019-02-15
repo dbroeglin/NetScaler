@@ -1,4 +1,4 @@
-$TestNsip              = $(if ($env:TEST_NSIP) { $env:TEST_NSIP } else { "172.16.124.10" })
+$TestNsip              = $(if ($env:TEST_NSIP) { $env:TEST_NSIP } else { "172.16.124.11" })
 $TestUsername          = "nsroot"
 $TestPassword          = "nsroot"
 
