@@ -8,19 +8,13 @@ In the following process we assume that the NetScaler _Host ID_ (first MAC addre
     $Nsip       = "172.16.124.11"
     $DefaultGw  = "172.16.124.1"
 
-### Download & License
-
-1. Go to https://www.citrix.com/lp/try/netscaler-vpx-platinum.html to generate a license.
-1. Go to https://www.citrix.com/content/citrix/en_us/account/toolbox/manage-licenses/allocate.html to activate the license with the NetScaler _Host ID_.
-1. Download the license file and save it as license.lic
-1. Download the VPX package for your target hypervisor
 
 ### VMWare Fusion
 
 The following setup instructions assume MacOSX with VMWare Fusion, but it can easily be
 adjusted to your own environment.
 
-1. Download _NetScaler VPX Express_ from https://www.citrix.com/downloads/netscaler-adc/ (a
+1. Download _NetScaler VPX Express_ from https://www.citrix.com/lp/secure/try/download-citrix-networking-vpx-platinum.html (a
 log in is required, just create a Citrix account)
 1. Unzip the downloaded file:
         unzip -x NSVPX-ESX-11.0-69.12_nc.zip -d NSVPX-ESX-11.0-69.12_nc
@@ -30,9 +24,6 @@ log in is required, just create a Citrix account)
 1. NetScaler should start and after a few seconds you will see the CLI setup wizard.
 Enter the IP address you will use to communicate with NetScaler, netmask and default
 gateway (ensure the proper VMWare network is configured for the VM).
-1. After a few seconds, check that you have access:
-        Connect-NetScaler -Hostname <insert IP address here> -Credential (Get-Credential -UserName nsroot)
-        Get-NSIPResource
 
 ### Hyper-V 
 
@@ -48,6 +39,20 @@ You can use the [New-NSHyperVInstance.ps1](https://github.com/dbroeglin/NetScale
 ### Other hypervisors
 
 TODO
+
+## Download & License
+
+1. After a few seconds, check that you have access:
+
+        Connect-NetScaler -Hostname <insert IP address here> -Credential (Get-Credential -UserName nsroot)
+        (Get-NSHardware).host
+
+
+2. The returned `host` field contains the _Host ID_ to use for license activation
+3. Go to https://www.citrix.com/lp/try/netscaler-vpx-platinum.html to generate a license.
+4. Go to https://www.citrix.com/account/#/manage-licenses/allocate.html to activate the license with the NetScaler _Host ID_.
+5. Download the license file and save it as license.lic
+6. Download the VPX package for your target hypervisor
 
 ## Setup a test NetScaler
 
